@@ -47,4 +47,66 @@ export class Tab1Page {
 
   ];
 
+  constructor(public toastController: ToastController, public alertController: AlertController) {}
+
+  async removeItem(item, index) {
+    const toast = await this.toastController.create({
+      header: 'Removing...',
+      message: 'Item removed: ' + item.name,
+      duration: 2000,
+      position: 'middle',
+      animated: true,
+      color: 'success',
+    });
+    toast.present();  // displays toast 
+
+    this.items.splice(index,1); // remove item from array
+  }
+    async addItemPopup() {
+      const alert = await this.alertController.create({
+        header: 'Add Grocery Item',
+        // subHeader: 'Subtitle',
+        message: 'Enter item, quantity, unit and imgUrl (if any, blank for default)',
+        inputs: [
+          {
+            name: 'name',
+            placeholder: 'Item'
+          },
+          {
+            name: 'qty',
+            placeholder: 'Quantity'
+          },
+          {
+            name: 'unit',
+            placeholder: 'Unit'
+          },
+          {
+            name: 'imgUrl',
+            placeholder: 'Image Url'
+          },
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+              console.log('Cancel item entry');
+            }
+          }, {
+            text: 'Add',
+            handler: (item) => {
+              if (item.name  != '')
+                if(item.imgUrl == '')
+                  item.imgUrl = 'assets/img/grocery.png'
+                this.items.push(item);
+            }
+          }
+        ]
+      });
+  
+      await alert.present(); // Present Alert
+  }
+
+
 }
